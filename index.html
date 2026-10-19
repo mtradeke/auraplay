@@ -5,229 +5,125 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AuraPlay - Stream Your World</title>
     <style>
-        /* --- CSS VARIABLES & RESET --- */
+        /* --- PREMIUM CSS VARIABLES --- */
         :root {
             --bg-primary: #0f0f0f;
             --bg-secondary: #181818;
             --bg-hover: #272727;
-            --text-primary: #ffffff;
+            --text-primary: #f1f1f1;
             --text-secondary: #aaaaaa;
-            --accent-blue: #0066ff; /* Signature Blue */
+            --accent-blue: #0066ff;
             --accent-blue-hover: #004bbd;
             --border-color: #303030;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            min-height: 100vh;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg-primary); color: var(--text-primary); min-height: 100vh; overflow-x: hidden; }
 
         /* --- HEADER --- */
         header {
-            position: sticky;
-            top: 0;
-            background-color: var(--bg-primary);
-            border-bottom: 1px solid var(--border-color);
-            padding: 12px 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            z-index: 100;
+            position: sticky; top: 0; background-color: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color); padding: 10px 24px;
+            display: flex; align-items: center; justify-content: space-between; z-index: 100;
         }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-        }
-
+        .logo-container { display: flex; align-items: center; gap: 8px; cursor: pointer; }
         .logo-icon {
-            width: 32px;
-            height: 32px;
-            background-color: var(--accent-blue);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width: 32px; height: 32px; background-color: var(--accent-blue);
+            border-radius: 8px; display: flex; align-items: center; justify-content: center;
         }
-
         .logo-icon::after {
-            content: '';
-            display: block;
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 6px 0 6px 10px;
-            border-color: transparent transparent transparent white;
-            margin-left: 2px;
+            content: ''; display: block; width: 0; height: 0;
+            border-style: solid; border-width: 6px 0 6px 10px;
+            border-color: transparent transparent transparent white; margin-left: 2px;
         }
+        .logo-text { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
 
-        .logo-text {
-            font-size: 20px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
-
-        .search-container {
-            display: flex;
-            flex: 1;
-            max-width: 600px;
-            margin: 0 40px;
-        }
-
+        .search-container { display: flex; flex: 1; max-width: 600px; margin: 0 40px; }
         #search-input {
-            flex: 1;
-            padding: 10px 16px;
-            background-color: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-right: none;
-            border-radius: 20px 0 0 20px;
-            color: var(--text-primary);
-            font-size: 16px;
-            outline: none;
+            flex: 1; padding: 10px 16px; background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color); border-right: none;
+            border-radius: 20px 0 0 20px; color: var(--text-primary); font-size: 16px; outline: none;
         }
-
-        #search-input:focus {
-            border-color: var(--accent-blue);
-        }
-
+        #search-input:focus { border-color: var(--accent-blue); }
         #search-btn {
-            padding: 0 24px;
-            background-color: var(--bg-hover);
-            border: 1px solid var(--border-color);
-            border-radius: 0 20px 20px 0;
-            color: var(--text-primary);
-            cursor: pointer;
-            font-size: 16px;
+            padding: 0 24px; background-color: var(--bg-hover);
+            border: 1px solid var(--border-color); border-radius: 0 20px 20px 0;
+            color: var(--text-primary); cursor: pointer; font-size: 16px;
         }
+        #search-btn:hover { background-color: #383838; }
 
-        #search-btn:hover {
-            background-color: #383838;
+        .auth-btn {
+            display: flex; align-items: center; gap: 8px; padding: 8px 16px;
+            background: transparent; border: 1px solid var(--accent-blue);
+            color: var(--accent-blue); border-radius: 18px; cursor: pointer; font-weight: 500;
         }
+        .auth-btn:hover { background: rgba(0, 102, 255, 0.1); }
 
-        /* --- MAIN CONTENT (HOME VIEW) --- */
-        main {
-            padding: 24px;
-            max-width: 1800px;
-            margin: 0 auto;
+        /* --- LAYOUT (SIDEBAR + MAIN) --- */
+        .app-container { display: flex; height: calc(100vh - 60px); }
+        
+        .sidebar {
+            width: 240px; background-color: var(--bg-primary); padding: 12px;
+            overflow-y: auto; border-right: 1px solid var(--border-color);
+            display: none; /* Hidden on mobile by default */
         }
+        @media (min-width: 1000px) { .sidebar { display: block; } }
+
+        .sidebar-item {
+            display: flex; align-items: center; gap: 20px; padding: 10px 12px;
+            border-radius: 10px; cursor: pointer; color: var(--text-primary); font-size: 14px;
+        }
+        .sidebar-item:hover { background-color: var(--bg-hover); }
+        .sidebar-item.active { background-color: var(--bg-hover); font-weight: 600; }
+        .sidebar-icon { font-size: 18px; width: 24px; text-align: center; }
+
+        main { flex: 1; padding: 24px; overflow-y: auto; }
+
+        /* --- VIDEO SECTIONS --- */
+        .section-title { font-size: 20px; font-weight: 600; margin-bottom: 16px; margin-top: 24px; }
+        .section-title:first-child { margin-top: 0; }
 
         .video-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 24px;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px; margin-bottom: 40px;
         }
 
-        .video-card {
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .video-card:hover {
-            transform: translateY(-4px);
-        }
-
+        .video-card { cursor: pointer; transition: transform 0.2s; }
+        .video-card:hover { transform: translateY(-4px); }
+        
         .thumbnail-container {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 16/9;
-            background-color: var(--bg-secondary);
-            border-radius: 12px;
-            overflow: hidden;
+            position: relative; width: 100%; aspect-ratio: 16/9;
+            background-color: var(--bg-secondary); border-radius: 12px; overflow: hidden;
         }
+        .thumbnail-container img { width: 100%; height: 100%; object-fit: cover; }
 
-        .thumbnail-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .video-info {
-            display: flex;
-            gap: 12px;
-            margin-top: 12px;
-        }
-
+        .video-info { display: flex; gap: 12px; margin-top: 12px; }
         .channel-avatar {
-            width: 36px;
-            height: 36px;
-            background-color: var(--accent-blue);
-            border-radius: 50%;
-            flex-shrink: 0;
+            width: 36px; height: 36px; background-color: var(--accent-blue);
+            border-radius: 50%; flex-shrink: 0;
         }
-
         .video-details h3 {
-            font-size: 16px;
-            font-weight: 500;
-            line-height: 1.4;
-            margin-bottom: 4px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            font-size: 15px; font-weight: 500; line-height: 1.4; margin-bottom: 4px;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
         }
+        .video-details p { font-size: 13px; color: var(--text-secondary); }
 
-        .video-details p {
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-
-        /* --- WATCH VIEW (PLAYER) --- */
-        #watch-view {
-            display: none;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
+        /* --- WATCH VIEW --- */
+        #watch-view { display: none; max-width: 1200px; margin: 0 auto; padding: 24px; }
         .back-btn {
-            background: none;
-            border: none;
-            color: var(--accent-blue);
-            font-size: 16px;
-            cursor: pointer;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            background: none; border: none; color: var(--accent-blue); font-size: 16px;
+            cursor: pointer; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
         }
-
         .player-wrapper {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 16/9;
-            background: black;
-            border-radius: 12px;
-            overflow: hidden;
+            position: relative; width: 100%; aspect-ratio: 16/9;
+            background: black; border-radius: 12px; overflow: hidden;
         }
+        .player-wrapper iframe { width: 100%; height: 100%; border: none; }
+        .watch-title { font-size: 20px; font-weight: 600; margin-top: 16px; }
+        .watch-channel { font-size: 14px; color: var(--text-secondary); margin-top: 8px; }
 
-        .player-wrapper iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        .watch-title {
-            font-size: 20px;
-            font-weight: 600;
-            margin-top: 16px;
-        }
-
-        /* --- RESPONSIVE --- */
-        @media (max-width: 768px) {
-            .search-container { margin: 0 16px; }
-            .logo-text { display: none; }
-            main { padding: 16px; }
-            .video-grid { grid-template-columns: 1fr; gap: 16px; }
-        }
+        /* --- LOADING & EMPTY STATES --- */
+        .loading { text-align: center; padding: 40px; color: var(--text-secondary); }
     </style>
 </head>
 <body>
@@ -240,67 +136,157 @@
         </div>
         
         <form class="search-container" onsubmit="handleSearch(event)">
-            <input type="text" id="search-input" placeholder="Search for videos..." autocomplete="off">
-            <button type="submit" id="search-btn">Search</button>
+            <input type="text" id="search-input" placeholder="Search" autocomplete="off">
+            <button type="submit" id="search-btn">🔍</button>
         </form>
         
-        <div style="width: 40px; height: 40px; background: var(--bg-hover); border-radius: 50%;"></div>
+        <button class="auth-btn" onclick="alert('Sign up feature coming soon! This is a demo interface.')">
+            👤 Sign In
+        </button>
     </header>
 
-    <!-- HOME VIEW (Video Grid) -->
-    <main id="home-view">
-        <div class="video-grid" id="video-grid">
-            <!-- Videos will be injected here by JavaScript -->
-        </div>
-    </main>
+    <div class="app-container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-item active" onclick="goHome()">🏠 Home</div>
+            <div class="sidebar-item" onclick="loadCategory('trending')">🔥 Trending</div>
+            <div class="sidebar-item" onclick="loadCategory('music')">🎵 Music</div>
+            <div class="sidebar-item" onclick="loadCategory('movies')">🎬 Movies</div>
+            <div class="sidebar-item" onclick="alert('Sign in to save your liked videos!')">❤️ Liked Videos</div>
+            <div class="sidebar-item" onclick="alert('Sign in to view your history!')"> History</div>
+        </aside>
 
-    <!-- WATCH VIEW (Video Player) -->
-    <main id="watch-view">
-        <button class="back-btn" onclick="goHome()">← Back to Home</button>
-        <div class="player-wrapper">
-            <iframe id="video-player" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-        </div>
-        <h1 class="watch-title" id="watch-title"></h1>
-    </main>
+        <!-- MAIN CONTENT -->
+        <main id="home-view">
+            <div id="dynamic-content">
+                <div class="loading">Loading awesome videos...</div>
+            </div>
+        </main>
+
+        <!-- WATCH VIEW -->
+        <main id="watch-view">
+            <button class="back-btn" onclick="goHome()">← Back to Home</button>
+            <div class="player-wrapper">
+                <iframe id="video-player" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            </div>
+            <h1 class="watch-title" id="watch-title"></h1>
+            <p class="watch-channel" id="watch-channel"></p>
+        </main>
+    </div>
 
     <script>
-        // --- CONFIGURATION ---
-        // To make the search bar work, you need a free YouTube Data API v3 Key.
-        // Get one here: https://console.cloud.google.com/apis/credentials
-        const API_KEY = 'YOUR_API_KEY_HERE'; 
-
-        // Default videos to show on the homepage before searching
-        const defaultVideos = [
-            { id: 'dQw4w9WgXcQ', title: 'Rick Astley - Never Gonna Give You Up', channel: 'Rick Astley' },
-            { id: 'jNQ48ZiqlDo', title: 'Beautiful Nature Scenery', channel: 'Nature Relaxation' },
-            { id: '9bZkp7q19f0', title: 'PSY - GANGNAM STYLE', channel: 'officialpsy' },
-            { id: 'kJQP7kiw5Fk', title: 'Luis Fonsi - Despacito', channel: 'Luis Fonsi' }
-        ];
+        // --- PIPED API CONFIGURATION (100% FREE, NO KEY NEEDED) ---
+        const PIPED_API = 'https://pipedapi.kavin.rocks';
 
         // --- INITIALIZATION ---
         document.addEventListener('DOMContentLoaded', () => {
-            renderVideos(defaultVideos);
+            loadHomePage();
         });
 
-        // --- FUNCTIONS ---
-        function renderVideos(videos) {
-            const grid = document.getElementById('video-grid');
-            grid.innerHTML = ''; // Clear existing
+        // --- LOAD HOME PAGE (Trending, Music, Movies) ---
+        async function loadHomePage() {
+            const contentDiv = document.getElementById('dynamic-content');
+            contentDiv.innerHTML = '<div class="loading">Loading awesome videos...</div>';
+            
+            try {
+                // Fetch Trending, Music, and Movies in parallel
+                const [trending, music, movies] = await Promise.all([
+                    fetch(`${PIPED_API}/trending?region=US`).then(r => r.json()),
+                    fetch(`${PIPED_API}/search?q=pop+music+2024&filter=videos`).then(r => r.json()),
+                    fetch(`${PIPED_API}/search?q=movie+trailers+2024&filter=videos`).then(r => r.json())
+                ]);
 
+                contentDiv.innerHTML = `
+                    <h2 class="section-title">🔥 Trending Now</h2>
+                    <div class="video-grid" id="grid-trending"></div>
+                    
+                    <h2 class="section-title"> Top Music</h2>
+                    <div class="video-grid" id="grid-music"></div>
+                    
+                    <h2 class="section-title">🎬 Popular Movies & Trailers</h2>
+                    <div class="video-grid" id="grid-movies"></div>
+                `;
+
+                renderVideos('grid-trending', trending.slice(0, 8));
+                renderVideos('grid-music', music.items.slice(0, 8));
+                renderVideos('grid-movies', movies.items.slice(0, 8));
+
+            } catch (error) {
+                console.error(error);
+                contentDiv.innerHTML = '<div class="loading">Oops! The video server is busy. Please try refreshing the page.</div>';
+            }
+        }
+
+        // --- LOAD SPECIFIC CATEGORY ---
+        async function loadCategory(category) {
+            const contentDiv = document.getElementById('dynamic-content');
+            contentDiv.innerHTML = '<div class="loading">Loading...</div>';
+            goHome(); // Ensure we are on home view
+
+            let query = category === 'trending' ? 'viral' : category;
+            
+            try {
+                const response = await fetch(`${PIPED_API}/search?q=${query}&filter=videos`);
+                const data = await response.json();
+                
+                contentDiv.innerHTML = `
+                    <h2 class="section-title">${category.charAt(0).toUpperCase() + category.slice(1)}</h2>
+                    <div class="video-grid" id="grid-category"></div>
+                `;
+                renderVideos('grid-category', data.items);
+            } catch (error) {
+                contentDiv.innerHTML = '<div class="loading">Failed to load videos.</div>';
+            }
+        }
+
+        // --- SEARCH FUNCTION ---
+        async function handleSearch(event) {
+            event.preventDefault();
+            const query = document.getElementById('search-input').value.trim();
+            if (!query) return;
+
+            const contentDiv = document.getElementById('dynamic-content');
+            contentDiv.innerHTML = '<div class="loading">Searching...</div>';
+            goHome();
+
+            try {
+                const response = await fetch(`${PIPED_API}/search?q=${encodeURIComponent(query)}&filter=videos`);
+                const data = await response.json();
+                
+                contentDiv.innerHTML = `
+                    <h2 class="section-title">Search results for "${query}"</h2>
+                    <div class="video-grid" id="grid-search"></div>
+                `;
+                renderVideos('grid-search', data.items);
+            } catch (error) {
+                contentDiv.innerHTML = '<div class="loading">Search failed. Please try again.</div>';
+            }
+        }
+
+        // --- HELPER: RENDER VIDEOS TO GRID ---
+        function renderVideos(gridId, videos) {
+            const grid = document.getElementById(gridId);
+            if (!grid) return;
+            
+            grid.innerHTML = '';
             videos.forEach(video => {
+                // Extract ID from Piped URL (e.g., "/watch?v=12345")
+                const videoId = video.url ? video.url.split('v=')[1] : null;
+                if (!videoId) return;
+
                 const card = document.createElement('div');
                 card.className = 'video-card';
-                card.onclick = () => playVideo(video.id, video.title);
+                card.onclick = () => playVideo(videoId, video.title, video.uploaderName);
                 
                 card.innerHTML = `
                     <div class="thumbnail-container">
-                        <img src="https://img.youtube.com/vi/${video.id}/hqdefault.jpg" alt="${video.title}">
+                        <img src="${video.thumbnail}" alt="${video.title}" onerror="this.src='https://via.placeholder.com/320x180?text=Video'">
                     </div>
                     <div class="video-info">
                         <div class="channel-avatar"></div>
                         <div class="video-details">
                             <h3>${video.title}</h3>
-                            <p>${video.channel}</p>
+                            <p>${video.uploaderName || 'Unknown Channel'}</p>
                         </div>
                     </div>
                 `;
@@ -308,50 +294,27 @@
             });
         }
 
-        function playVideo(videoId, title) {
+        // --- PLAY VIDEO ---
+        function playVideo(videoId, title, channel) {
             document.getElementById('home-view').style.display = 'none';
+            document.querySelector('.sidebar').style.display = 'none'; // Hide sidebar on mobile/watch
             document.getElementById('watch-view').style.display = 'block';
             
-            // The magic happens here: autoplay=1 forces it to play automatically!
             document.getElementById('video-player').src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
             document.getElementById('watch-title').innerText = title;
+            document.getElementById('watch-channel').innerText = channel;
             
-            window.scrollTo(0, 0); // Scroll to top
+            window.scrollTo(0, 0);
         }
 
+        // --- GO HOME ---
         function goHome() {
             document.getElementById('home-view').style.display = 'block';
+            if (window.innerWidth >= 1000) {
+                document.querySelector('.sidebar').style.display = 'block';
+            }
             document.getElementById('watch-view').style.display = 'none';
-            document.getElementById('video-player').src = ''; // Stop the video
-        }
-
-        async function handleSearch(event) {
-            event.preventDefault();
-            const query = document.getElementById('search-input').value.trim();
-            if (!query) return;
-
-            if (API_KEY === 'YOUR_API_KEY_HERE') {
-                alert("Please add your YouTube API Key in the code to use the search feature!");
-                return;
-            }
-
-            try {
-                const response = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=12&key=${API_KEY}`);
-                const data = await response.json();
-                
-                if (data.items) {
-                    const videos = data.items.map(item => ({
-                        id: item.id.videoId,
-                        title: item.snippet.title,
-                        channel: item.snippet.channelTitle
-                    }));
-                    renderVideos(videos);
-                    goHome(); // Ensure we are on the home view
-                }
-            } catch (error) {
-                console.error('Error fetching data:', error);
-                alert('Failed to search. Check your API key or internet connection.');
-            }
+            document.getElementById('video-player').src = ''; // Stop video
         }
     </script>
 </body>
